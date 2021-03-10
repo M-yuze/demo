@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 
+//服务端，演示传统的阻塞IO（BIO）过程-->入门
 public class SocketServer {
     public static void main(String[] args) throws IOException {
         ServerSocket serverSocket = new ServerSocket(1234);
@@ -12,7 +13,19 @@ public class SocketServer {
             //阻塞方法
             Socket clientSocket = serverSocket.accept();
             System.out.println("有客户端连接了");
-            handler(clientSocket);
+            //handler(clientSocket);              //单线程，无法解决高并发问题
+            //优化，使用多线程,但是以下多线程使用的方式再高并发的时候会导致无限创建线程，最终导致内存爆满，可以采用线程池创建固定线程数，
+            //但是这样的话线程数就固定了，线程数就等于并发数，所以还是达不到高并发的需求
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    try {
+                        handler(clientSocket);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }).start();
         }
     }
 

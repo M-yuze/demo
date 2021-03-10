@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="https://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js">
+    </script>
+    <script>
+        $(function () {
+            //按钮点击事件，调用后台接口返回
+            $("#btnRefresh").click(function () {
+                //通过ajax的get方式传递一个参数的模拟代码
+                $.ajax({
+                    type:"GET",
+                    dataType:"text",
+                    url:"http://localhost:8080/test",
+                    data:{str:$("txtBefore").val()},
+                    cache:false,
+                    success:function (data) {
+                        $("resultDiv").html(data);
+                    },
+                    error:function () {
+                        
+                    }
+                })
+            })
+        })
+    </script>
+</head>
+<body>
+
+    <div style="margin: 10px;">
+        <label>输入数据传入后台：</label>
+        <input type="text" id="txtBefore" style="width: 200px;"/>
+        <input type="button" id="btnRefresh" value="将参数传道后台"/>
+    </div>
+
+    <div style="margin: 10px;color: red;">
+        <label>后台返回结果：</label>
+        <div id="resultDiv"></div>
+    </div>
+
+</body>
+
+</html>
